@@ -12,6 +12,9 @@
 			#otpgen-type-totp:checked ~ #otpgen-counter-div {
 				display: none;
 			}
+			#otpgen-type-hotp:checked ~ #otpgen-period-div {
+				display: none;
+			}
 			#otpgen-output {
 				font-size: larger;
 			}
@@ -70,10 +73,6 @@
 					<label for="otpgen-secret">Secret key:</label>
 					<input id="otpgen-secret" name="secret" type="text" required/>
 				</div>
-				<div id="otpgen-counter-div">
-					<label for="otpgen-counter">Counter:</label>
-					<input id="otpgen-counter" name="counter" type="number" value="1" required/>
-				</div>
 				<div id="otpgen-algo-div">
 					<label for="otpgen-algo">Algorithm:</label>
 					<select id="otpgen-algo" name="algo">
@@ -96,11 +95,13 @@
 					<label for="otpgen-period">Period (seconds):</label>
 					<input id="otpgen-period" name="period" type="number" value="30" required/>
 				</div>
+				<div id="otpgen-counter-div">
+					<label for="otpgen-counter">Counter:</label>
+					<input id="otpgen-counter" name="counter" type="number" value="1" required/>
+				</div>
 				<input type="submit" value="Generate"/>
 			</form>
-			<div>
-				<p>OTP code: <code id="otpgen-output">------</code></p>
-			</div>
+			<p>OTP code: <code id="otpgen-output">------</code></p>
 			<h2>Other OTP tools</h2>
 			<ul>
 				<li><a href="https://github.com/char/duo-hotp-export">duo-hotp-export</a> (a Rust tool to extract HOTP keys from Duo Mobile)</li>
