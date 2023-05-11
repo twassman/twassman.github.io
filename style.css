@@ -17,6 +17,14 @@ footer {
 	margin-bottom: 1em;
 }
 
+.footer-extra {
+	margin-top: 0.5em;
+}
+
+.footer-extra ul {
+	margin: 0;
+}
+
 .hlist,
 .hlist ol {
 	padding: 0;
@@ -40,4 +48,10 @@ footer {
 .hlist li li:last-child::after {
 	content: ")";
 	font-weight: normal;
+}
+
+.warning {
+	background-color: lightcoral;
+	padding: 0.5em;
+	margin-bottom: 1em;
 }

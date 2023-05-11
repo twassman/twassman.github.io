@@ -8,6 +8,49 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300&display=swap"/>
 		<link rel="stylesheet" href="/style.css"/>
+		<style>
+			#otpgen-type-totp:checked ~ #otpgen-counter-div {
+				display: none;
+			}
+			#otpgen-output {
+				font-size: larger;
+			}
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/otpauth/9.1.2/otpauth.umd.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('#js-warning').hide();
+				$('#otpgen').submit(function() {
+					let settings = $(this).serializeArray().reduce(
+						function(x, i) {
+							x[i.name] = i.value;
+							return x;
+						},
+						{}
+					);
+					let token;
+					if (settings['type'] == 'totp') {
+						let totp = new OTPAuth.TOTP({
+							algorithm: settings['algo'],
+							digits: settings['length'],
+							period: settings['period'],
+							secret: settings['secret'],
+						});
+						token = totp.generate();
+					} else if (settings['type'] == 'hotp') {
+						let hotp = new OTPAuth.HOTP({
+							algorithm: settings['algo'],
+							digits: settings['length'],
+							period: settings['period'],
+							secret: settings['secret'],
+						});
+						token = hotp.generate({counter: settings['counter']});
+					}
+					$('#otpgen-output').text(token);
+				});
+			});
+		</script>
 	</head>
 	<body>
 		<header>
@@ -16,7 +59,48 @@
 			<hr/>
 		</header>
 		<main>
-			Nothing here yet!
+			<div class="warning" id="js-warning">JavaScript appears to be disabled or unsupported. Please enable it or use a browser that supports it to run this tool.</div>
+			<form id="otpgen" onsubmit="return false;">
+				Type:
+				<input id="otpgen-type-totp" name="type" type="radio" value="totp" checked required/>
+				<label for="otpgen-type-totp">TOTP</label>
+				<input id="otpgen-type-hotp" name="type" type="radio" value="hotp" required/>
+				<label for="otpgen-type-hotp">HOTP</label>
+				<div id="otpgen-secret-div">
+					<label for="otpgen-secret">Secret key:</label>
+					<input id="otpgen-secret" name="secret" type="text" required/>
+				</div>
+				<div id="otpgen-counter-div">
+					<label for="otpgen-counter">Counter:</label>
+					<input id="otpgen-counter" name="counter" type="number" value="1" required/>
+				</div>
+				<div id="otpgen-algo-div">
+					<label for="otpgen-algo">Algorithm:</label>
+					<select id="otpgen-algo" name="algo">
+						<option value="sha1">SHA1</option>
+						<option value="sha224">SHA224</option>
+						<option value="sha256">SHA256</option>
+						<option value="sha384">SHA384</option>
+						<option value="sha512">SHA512</option>
+						<option value="sha3-224">SHA3-224</option>
+						<option value="sha3-256">SHA3-256</option>
+						<option value="sha3-384">SHA3-384</option>
+						<option value="sha3-512">SHA3-512</option>
+					</select>
+				</div>
+				<div id="otpgen-length-div">
+					<label for="otpgen-length">Length (number of digits):</label>
+					<input id="otpgen-length" name="length" type="number" value="6" required/>
+				</div>
+				<div id="otpgen-period-div">
+					<label for="otpgen-period">Period (seconds):</label>
+					<input id="otpgen-period" name="period" type="number" value="30" required/>
+				</div>
+				<input type="submit" value="Generate"/>
+			</form>
+			<div>
+				<p>OTP code: <code id="otpgen-output">------</code></p>
+			</div>
 		</main>
 		<footer>
 			<hr/>
@@ -24,6 +108,13 @@
 				<li>© 2020–2023 Tol Wassman</li>
 				<li><a href="/license.html">Licensing</a></li>
 			</ul>
+			<div class="footer-extra">
+				This tool uses the following libraries:
+				<ul>
+					<li><a href="https://jquery.com">JQuery</a>, <a href="https://developers.google.com/speed/libraries">served by Google</a></li>
+					<li><a href="https://github.com/hectorm/otpauth">OTPAuth</a>, <a href="https://cdnjs.cloudflare.com">served by Cloudflare</a></li>
+				</ul>
+			</div>
 		</footer>
 	</body>
 </html>
