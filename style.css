@@ -59,3 +59,10 @@ footer {
 	padding: 0.5em;
 	margin-bottom: 1em;
 }
+
+@media (prefers-color-scheme: dark) {
+	body {
+		color: #ccc;
+		background: #000;
+	}
+}
