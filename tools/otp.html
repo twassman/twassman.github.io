@@ -19,11 +19,10 @@
 				font-size: larger;
 			}
 		</style>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/otpauth/9.1.2/otpauth.umd.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/otpauth/9.3.1/otpauth.umd.min.js"></script>
 		<script>
 			$(document).ready(function() {
-				$('#js-warning').hide();
 				$('#otpgen').submit(function() {
 					let settings = $(this).serializeArray().reduce(
 						function(x, i) {
@@ -33,22 +32,26 @@
 						{}
 					);
 					let token;
-					if (settings['type'] == 'totp') {
-						let totp = new OTPAuth.TOTP({
-							algorithm: settings['algo'],
-							digits: settings['length'],
-							period: settings['period'],
-							secret: settings['secret'],
-						});
-						token = totp.generate();
-					} else if (settings['type'] == 'hotp') {
-						let hotp = new OTPAuth.HOTP({
-							algorithm: settings['algo'],
-							digits: settings['length'],
-							period: settings['period'],
-							secret: settings['secret'],
-						});
-						token = hotp.generate({counter: settings['counter']});
+					try {
+						if (settings['type'] == 'totp') {
+							let totp = new OTPAuth.TOTP({
+								algorithm: settings['algo'],
+								digits: settings['length'],
+								period: settings['period'],
+								secret: settings['secret'],
+							});
+							token = totp.generate();
+						} else if (settings['type'] == 'hotp') {
+							let hotp = new OTPAuth.HOTP({
+								algorithm: settings['algo'],
+								digits: settings['length'],
+								period: settings['period'],
+								secret: settings['secret'],
+							});
+							token = hotp.generate({counter: settings['counter']});
+						}
+					} catch (error) {
+						token = error;
 					}
 					$('#otpgen-output').text(token);
 				});
@@ -62,7 +65,9 @@
 			<hr/>
 		</header>
 		<main>
-			<div class="warning" id="js-warning">JavaScript appears to be disabled or unsupported. Please enable it or use a browser that supports it to run this tool.</div>
+			<noscript>
+				<div class="warning">JavaScript appears to be disabled or unsupported. Please enable it or use a browser that supports it to run this tool.</div>
+			</noscript>
 			<form id="otpgen" onsubmit="return false;">
 				Type:
 				<input id="otpgen-type-totp" name="type" type="radio" value="totp" checked required/>
@@ -110,14 +115,14 @@
 		<footer>
 			<hr/>
 			<ul class="hlist">
-				<li>© 2023 Tol Wassman</li>
+				<li>© 2023–2024 Tol Wassman</li>
 				<li><a href="/license.html">Licensing</a></li>
 			</ul>
 			<div class="footer-extra">
 				This tool uses the following libraries:
 				<ul>
-					<li><a href="https://jquery.com">JQuery</a> 3.6.4, <a href="https://developers.google.com/speed/libraries">served by Google</a></li>
-					<li><a href="https://github.com/hectorm/otpauth">OTPAuth</a> 9.1.2, <a href="https://cdnjs.cloudflare.com">served by Cloudflare</a></li>
+					<li><a href="https://jquery.com">JQuery</a> 3.7.1, <a href="https://developers.google.com/speed/libraries">served by Google</a></li>
+					<li><a href="https://github.com/hectorm/otpauth">OTPAuth</a> 9.3.1, <a href="https://cdnjs.cloudflare.com">served by Cloudflare</a></li>
 				</ul>
 			</div>
 		</footer>
