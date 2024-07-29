@@ -62,7 +62,7 @@ footer {
 
 @media (prefers-color-scheme: dark) {
 	body {
-		color: #ccc;
+		color: #ddd;
 		background: #000;
 	}
 }
