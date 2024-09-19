@@ -21,6 +21,15 @@ footer {
 	margin-bottom: 1em;
 }
 
+dl {
+	display: grid;
+	grid-template-columns: auto 1fr;
+}
+
+dt::after {
+	content: ": ";
+}
+
 .footer-extra {
 	margin-top: 0.5em;
 }
@@ -52,6 +61,14 @@ footer {
 .hlist li li:last-child::after {
 	content: ")";
 	font-weight: normal;
+}
+
+.ublist {
+	list-style: none;
+}
+
+.you-are-here {
+	list-style-type: "→ ";
 }
 
 .warning {
