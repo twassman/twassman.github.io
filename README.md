@@ -1,3 +1,3 @@
-# twassman.github.io
+This repository contains a [personal website](https://gh.tol.sh).
 
-A [personal website](https://twassman.github.io).
+Feel free to submit pull requests to improve tools/applets.
